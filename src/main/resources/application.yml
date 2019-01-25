@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: training
+
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:training;DB_CLOSE_ON_EXIT=FALSE
+    test-on-borrow: true
+    validation-query: SELECT 1
+    username: training-user
+    password: training
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+      javax:
+        validation:
+          mode: auto
+
+logging:
+  level:
+    root: debug
