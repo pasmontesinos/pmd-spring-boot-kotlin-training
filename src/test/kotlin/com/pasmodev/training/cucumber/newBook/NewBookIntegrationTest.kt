@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.cucumber.steps
+package com.pasmodev.training.cucumber.newBook
 
-import com.pasmodev.training.cucumber.SpringBootTestStep
-import cucumber.api.PendingException
-import cucumber.api.java.en.Given
+import cucumber.api.CucumberOptions
+import cucumber.api.junit.Cucumber
+import org.junit.runner.RunWith
 
-class CommonSteps : SpringBootTestStep() {
-
-
-}
+@RunWith(Cucumber::class)
+@CucumberOptions(
+        features = ["classpath:features/new_book.feature"],
+        plugin = ["json:target/cucumber/new_book.json", "junit:target/cucumber/new_book.xml"],
+        glue = ["classpath:com.pasmodev.training.cucumber.newBook"],
+        tags = ["@NewBook"]
+)
+class NewBookIntegrationTest

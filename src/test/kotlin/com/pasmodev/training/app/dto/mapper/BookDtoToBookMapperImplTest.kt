@@ -17,52 +17,90 @@
 package com.pasmodev.training.app.dto.mapper
 
 import com.pasmodev.training.app.dto.BookDto
+import com.pasmodev.training.app.exception.NullPropertyException
 import com.pasmodev.training.domain.model.Book
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.`when` as _when
 
 class BookDtoToBookMapperImplTest {
+
+    @Mock lateinit var mockBookDto: BookDto
+    @Mock lateinit var mockBook: Book
+
     private lateinit var mapper: BookDtoToBookMapper
+
+    private val isbn = "isbn"
+    private val title = "title"
+    private val author = "author"
+    private val category = "category"
 
     @Before
     fun setUp() {
+        MockitoAnnotations.initMocks(this)
+
+        _when(mockBookDto.isbn).thenReturn(isbn)
+        _when(mockBookDto.title).thenReturn(title)
+        _when(mockBookDto.author).thenReturn(author)
+        _when(mockBookDto.category).thenReturn(category)
+
+        _when(mockBook.isbn).thenReturn(isbn)
+        _when(mockBook.title).thenReturn(title)
+        _when(mockBook.author).thenReturn(author)
+        _when(mockBook.category).thenReturn(category)
+
         mapper = BookDtoToBookMapperImpl()
     }
 
     @Test
-    fun map() {
-        var bookDto = BookDto(
-                isbn = "isbn",
-                title = "title",
-                author = "author",
-                category = "category"
-        )
+    fun `test map`() {
+        var book = mapper.map(mockBookDto)
 
-        var book = mapper.map(bookDto)
-
-        assertThat(book.isbn, equalTo(bookDto.isbn))
-        assertThat(book.title, equalTo(bookDto.title))
-        assertThat(book.author, equalTo(bookDto.author))
-        assertThat(book.category, equalTo(bookDto.category))
+        assertThat(book.isbn, equalTo(mockBookDto.isbn))
+        assertThat(book.title, equalTo(mockBookDto.title))
+        assertThat(book.author, equalTo(mockBookDto.author))
+        assertThat(book.category, equalTo(mockBookDto.category))
     }
 
     @Test
-    fun reverseMap() {
-        var book = Book(
-                isbn = "isbn",
-                title = "title",
-                author = "author",
-                category = "category"
-        )
+    fun `test reverseMap`() {
+        var bookDto = mapper.reverseMap(mockBook)
 
-        var bookDto = mapper.reverseMap(book)
-
-        assertThat(bookDto.isbn, equalTo(book.isbn))
-        assertThat(bookDto.title, equalTo(book.title))
-        assertThat(bookDto.author, equalTo(book.author))
-        assertThat(bookDto.category, equalTo(book.category))
+        assertThat(bookDto.isbn, equalTo(mockBook.isbn))
+        assertThat(bookDto.title, equalTo(mockBook.title))
+        assertThat(bookDto.author, equalTo(mockBook.author))
+        assertThat(bookDto.category, equalTo(mockBook.category))
     }
 
+    @Test(expected = NullPropertyException::class)
+    fun `when map isbn null then throws NullPropertyException`() {
+        _when(mockBookDto.isbn).thenReturn(null)
+
+        mapper.map(mockBookDto)
+    }
+
+    @Test(expected = NullPropertyException::class)
+    fun `when map title null then throws NullPropertyException`() {
+        _when(mockBookDto.title).thenReturn(null)
+
+        mapper.map(mockBookDto)
+    }
+
+    @Test(expected = NullPropertyException::class)
+    fun `when map author null then throws NullPropertyException`() {
+        _when(mockBookDto.author).thenReturn(null)
+
+        mapper.map(mockBookDto)
+    }
+
+    @Test(expected = NullPropertyException::class)
+    fun `when map category null then throws NullPropertyException`() {
+        _when(mockBookDto.category).thenReturn(null)
+
+        mapper.map(mockBookDto)
+    }
 }

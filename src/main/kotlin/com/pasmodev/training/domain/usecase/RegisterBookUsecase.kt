@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.cucumber
+package com.pasmodev.training.domain.usecase
 
-import com.pasmodev.training.app.TrainingApplication
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
+import com.pasmodev.training.domain.model.Book
 
-@ContextConfiguration
-@SpringBootTest(
-        classes = [TrainingApplication::class],
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-abstract class SpringBootTestStep
+interface RegisterBookUsecase {
+    operator fun invoke(book: Book): Book
+}

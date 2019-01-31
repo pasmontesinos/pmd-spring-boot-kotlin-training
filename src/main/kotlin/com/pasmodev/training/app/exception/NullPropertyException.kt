@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.domain.repository
+package com.pasmodev.training.app.exception
 
-import com.pasmodev.training.domain.model.Book
+import java.lang.Exception
 
-interface BookRepository {
-    fun deleteAll()
-    fun getAll() : List<Book>
-    fun create(book: Book): Book
-}
+class NullPropertyException(message: String) : Exception(message)

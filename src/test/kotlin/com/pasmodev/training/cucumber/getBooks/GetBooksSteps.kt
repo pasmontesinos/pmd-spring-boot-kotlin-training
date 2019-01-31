@@ -14,71 +14,59 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.cucumber.steps
+package com.pasmodev.training.cucumber.getBooks
 
+import com.pasmodev.training.app.TrainingApplication
 import com.pasmodev.training.app.dto.BookDto
 import com.pasmodev.training.app.service.GetBooksAppService
-import com.pasmodev.training.cucumber.SpringBootTestStep
+import com.pasmodev.training.cucumber.BaseSteps
 import com.pasmodev.training.domain.model.Book
 import com.pasmodev.training.domain.repository.BookRepository
-import cucumber.api.PendingException
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import cucumber.api.java8.En
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.HttpStatus
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.ResponseEntity
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.client.RestTemplate
-import javax.xml.ws.Response
 
-
-class GetBooksSteps : SpringBootTestStep() {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = [TrainingApplication::class])
+class GetBooksSteps : BaseSteps(), En {
 
     @Autowired
     lateinit var bookRepository: BookRepository
 
-    @Value("\${local.server.port}")
-    private val localServerPort: Int = 0
-
-    private val booksEndpoint: String
-        get() = "http://localhost:$localServerPort/${GetBooksAppService.BOOKS_ENDPOINT}"
-
     private var responseList: ResponseEntity<Array<BookDto>>? = null
 
+    init {
 
-    @Given("^there are not any book$")
-    @Throws(Throwable::class)
-    fun there_are_not_any_book() {
-        bookRepository.deleteAll()
+        Given("^there are not any book$") {
+            bookRepository.deleteAll()
+        }
+
+        Given("^there are (\\d+) books$") { counter: Int ->
+            (0 until counter).forEach { bookRepository.create(sampleBooks[it]) }
+        }
+
+        When("^get list of books$"){
+            responseList = restTemplate.getForEntity(booksEndpoint, Array<BookDto>::class.java)
+        }
+
+        Then("^response list is empty$") {
+            assertThat(responseList?.body?.size, equalTo(0))
+        }
+
+        Then("^response list has (\\d+) books$") { counter: Int ->
+            assertThat(responseList?.body?.size, equalTo(counter))
+        }
     }
 
-    @Given("^there are (\\d+) books$")
-    @Throws(Throwable::class)
-    fun there_are_books(counter: Int) {
-        (0 until counter).forEach { bookRepository.save(sampleBooks[it]) }
-    }
-
-    @When("^get list of books$")
-    @Throws(Throwable::class)
-    fun get_list_of_books() {
-        responseList = RestTemplate().getForEntity(booksEndpoint, Array<BookDto>::class.java)
-    }
-
-    @Then("^response list is empty$")
-    @Throws(Throwable::class)
-    fun result_list_is_empty() {
-        assertThat(responseList?.body?.size, equalTo(0))
-    }
-
-    @Then("^response list has (\\d+) books$")
-    @Throws(Throwable::class)
-    fun response_list_has_books(counter: Int) {
-        assertThat(responseList?.body?.size, equalTo(counter))
-    }
 
     private val sampleBooks = listOf<Book>(
             Book(
@@ -106,5 +94,4 @@ class GetBooksSteps : SpringBootTestStep() {
                     "programming"
             )
     )
-
 }

@@ -18,6 +18,7 @@ buildscript {
 	ext {
 		kotlinVersion = '1.2.71'
 		springBootVersion = '2.1.2.RELEASE'
+		cucumberVersion = '1.2.5'
 	}
 	repositories {
 		mavenCentral()
@@ -58,8 +59,9 @@ dependencies {
 	implementation "org.jetbrains.kotlin:kotlin-reflect"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'info.cukes:cucumber-spring:1.2.5'
-	testImplementation 'info.cukes:cucumber-junit:1.2.5'
+	testImplementation "info.cukes:cucumber-java8:$cucumberVersion"
+	testImplementation "info.cukes:cucumber-junit:$cucumberVersion"
+	testImplementation "info.cukes:cucumber-spring:$cucumberVersion"
 }
 
 compileKotlin {

@@ -35,10 +35,6 @@ class GetBooksAppService {
     @GetMapping(BOOKS_ENDPOINT)
     fun findAll(): List<BookDto> {
         return getBooks().map { book -> bookDtoToBookMapper.reverseMap(book) }
-        /*
-        return
-        )
-        */
     }
 
     companion object {

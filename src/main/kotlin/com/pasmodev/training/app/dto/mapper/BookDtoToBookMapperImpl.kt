@@ -17,6 +17,7 @@
 package com.pasmodev.training.app.dto.mapper
 
 import com.pasmodev.training.app.dto.BookDto
+import com.pasmodev.training.app.exception.NullPropertyException
 import com.pasmodev.training.domain.model.Book
 import org.springframework.stereotype.Component
 
@@ -25,10 +26,10 @@ class BookDtoToBookMapperImpl : BookDtoToBookMapper {
 
     override fun map(dto: BookDto): Book {
         return Book(
-                isbn = dto.isbn,
-                title = dto.title,
-                author = dto.author,
-                category = dto.category
+                isbn = dto.isbn?.let { it } ?: throw NullPropertyException("ISBN must no be null"),
+                title = dto.title?.let { it } ?: throw NullPropertyException("Title must no be null"),
+                author = dto.author?.let { it } ?: throw NullPropertyException("Author must no be null"),
+                category = dto.category?.let { it } ?: throw NullPropertyException("Category must no be null")
         )
     }
 

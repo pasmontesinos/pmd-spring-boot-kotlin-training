@@ -16,7 +16,9 @@
 
 package com.pasmodev.training.data.repository
 
+import com.pasmodev.training.data.entity.BookEntity
 import com.pasmodev.training.data.entity.mapper.BookEntityToBookMapper
+import com.pasmodev.training.domain.exception.BookAlreadyExistsException
 import com.pasmodev.training.domain.model.Book
 import com.pasmodev.training.domain.repository.BookRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -48,7 +50,18 @@ class BookRepositoryImpl : BookRepository {
     }
 
     @Transactional
-    override fun save(book: Book) {
-        bookJpaRepository.save(bookEntityToBookMapper.reverseMap(book))
+    override fun create(book: Book): Book {
+        if (bookJpaRepository.existsById(book.isbn))
+            throw BookAlreadyExistsException("The book with ISBN ${book.isbn} already exists")
+
+        return toModel(bookJpaRepository.save(toEntity(book)))
+    }
+
+    private fun toEntity(book: Book): BookEntity {
+        return bookEntityToBookMapper.reverseMap(book)
+    }
+
+    private fun toModel(bookEntity: BookEntity): Book {
+        return bookEntityToBookMapper.map(bookEntity)
     }
 }

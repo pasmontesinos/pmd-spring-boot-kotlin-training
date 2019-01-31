@@ -14,6 +14,26 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.app.dto
+package com.pasmodev.training.cucumber
 
-data class BookDto(var isbn: String?, var title: String?, var author: String?, var category: String?)
+import com.pasmodev.training.app.service.GetBooksAppService
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.web.client.RestTemplate
+
+abstract class BaseSteps {
+
+    @LocalServerPort
+    private val localServerPort: Int = 0
+
+    private val server = "http://localhost"
+
+    protected val booksEndpoint: String
+        get() = "$server:$localServerPort/${GetBooksAppService.BOOKS_ENDPOINT}"
+
+    protected val restTemplate = RestTemplate()
+
+    init {
+        restTemplate.errorHandler = RestErrorHandler()
+    }
+}

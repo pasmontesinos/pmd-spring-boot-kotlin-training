@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.domain.repository
+package com.pasmodev.training.domain.usecase
 
 import com.pasmodev.training.domain.model.Book
+import com.pasmodev.training.domain.repository.BookRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
-interface BookRepository {
-    fun deleteAll()
-    fun getAll() : List<Book>
-    fun create(book: Book): Book
+@Component
+class RegisterBookUsecaseImpl @Autowired constructor(val bookRepository: BookRepository) : RegisterBookUsecase {
+    override fun invoke(book: Book): Book {
+        return bookRepository.create(book)
+    }
 }

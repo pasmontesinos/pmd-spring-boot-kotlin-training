@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.cucumber
+package com.pasmodev.training.cucumber.getBooks
 
 import cucumber.api.CucumberOptions
 import cucumber.api.junit.Cucumber
@@ -22,8 +22,9 @@ import org.junit.runner.RunWith
 
 @RunWith(Cucumber::class)
 @CucumberOptions(
-        glue = ["com.pasmodev.training.cucumber.steps"],
-        features = ["src/test/resources/"],
-        format = ["pretty", "html:target/cucumber-html-report", "json:target/cucumber-json-report.json"]
+        features = ["classpath:features/get_books.feature"],
+        plugin = ["json:target/cucumber/get_books.json", "junit:target/cucumber/get_books.xml"],
+        glue = ["classpath:com.pasmodev.training.cucumber.getBooks"],
+        tags = ["@GetBooks"]
 )
-class CucumberIntegrationTest
+class GetBooksIntegrationTest
