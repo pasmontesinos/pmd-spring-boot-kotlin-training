@@ -19,12 +19,15 @@ package com.pasmodev.training.data.repository
 import com.pasmodev.training.data.entity.BookEntity
 import com.pasmodev.training.data.entity.mapper.BookEntityToBookMapper
 import com.pasmodev.training.domain.exception.BookAlreadyExistsException
+import com.pasmodev.training.domain.exception.BookNotFoundException
 import com.pasmodev.training.domain.model.Book
 import com.pasmodev.training.domain.repository.BookRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
+import javax.persistence.EntityNotFoundException
 import javax.persistence.PersistenceContext
 
 
@@ -52,9 +55,20 @@ class BookRepositoryImpl : BookRepository {
     @Transactional
     override fun create(book: Book): Book {
         if (bookJpaRepository.existsById(book.isbn))
-            throw BookAlreadyExistsException("The book with ISBN ${book.isbn} already exists")
+            throw BookAlreadyExistsException("The book with ISBN ${book.isbn} already exist")
 
         return toModel(bookJpaRepository.save(toEntity(book)))
+    }
+
+    override fun findByIsbn(isbn: String): Book {
+
+        val bookEntity = bookJpaRepository.findById(isbn)
+
+        if (bookEntity.isPresent){
+            return toModel(bookEntity.get())
+        } else {
+            throw BookNotFoundException("The book with ISBN $isbn does not exist")
+        }
     }
 
     private fun toEntity(book: Book): BookEntity {

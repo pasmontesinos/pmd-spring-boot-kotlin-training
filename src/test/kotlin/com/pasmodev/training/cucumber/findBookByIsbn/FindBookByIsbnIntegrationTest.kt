@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.domain.repository
+package com.pasmodev.training.cucumber.findBookByIsbn
 
-import com.pasmodev.training.domain.model.Book
+import cucumber.api.CucumberOptions
+import cucumber.api.junit.Cucumber
+import org.junit.runner.RunWith
 
-interface BookRepository {
-    fun deleteAll()
-    fun getAll() : List<Book>
-    fun create(book: Book): Book
-    fun findByIsbn(isbn: String): Book
-}
+@RunWith(Cucumber::class)
+@CucumberOptions(
+        features = ["classpath:features/find_book_by_isbn.feature"],
+        plugin = ["json:target/cucumber/find_book_by_isbn.json", "junit:target/cucumber/find_book_by_isbn.xml"],
+        glue = ["classpath:com.pasmodev.training.cucumber.findBookByIsbn"],
+        tags = ["@FindBookByIsbn"]
+)
+class FindBookByIsbnIntegrationTest

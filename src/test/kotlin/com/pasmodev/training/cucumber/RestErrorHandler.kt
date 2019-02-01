@@ -18,6 +18,7 @@ package com.pasmodev.training.cucumber
 
 import com.pasmodev.training.app.exception.NullPropertyException
 import com.pasmodev.training.domain.exception.BookAlreadyExistsException
+import com.pasmodev.training.domain.exception.BookNotFoundException
 import org.json.JSONObject
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.ClientHttpResponse
@@ -38,12 +39,29 @@ class RestErrorHandler : DefaultResponseErrorHandler() {
             val body = JSONObject(mapInputStreamToString(httpResponse.body))
             val fields = body.getString("message").split("~:")
 
-            when (fields[0]){
-                "NullPropertyException" -> throw NullPropertyException(fields[1])
-                "BookAlreadyExistsException" -> throw BookAlreadyExistsException(fields[1])
-                else -> throw Exception("Generic Rest exception")
+            val exception = try {
+                val clazz = getExceptionClassName(fields[0])
+                val constructor = clazz!!.getConstructor(String::class.java)
+                constructor.newInstance(fields[1]) as Exception
+            } catch (e: Exception){
+                Exception("Generic Rest exception")
+            }
+
+            throw exception
+        }
+    }
+
+    private fun getExceptionClassName(name: String): Class<*>? {
+
+        for (exceptionPackage in listOf<String>("com.pasmodev.training.app.exception", "com.pasmodev.training.domain.exception")){
+            try {
+                return Class.forName("$exceptionPackage.$name")
+            } catch (e: Exception) {
+                //
             }
         }
+
+        return null
     }
 
     private fun mapInputStreamToString(inputStream: InputStream) : String {

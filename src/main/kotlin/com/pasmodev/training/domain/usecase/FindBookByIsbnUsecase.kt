@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.domain.repository
+package com.pasmodev.training.domain.usecase
 
 import com.pasmodev.training.domain.model.Book
 
-interface BookRepository {
-    fun deleteAll()
-    fun getAll() : List<Book>
-    fun create(book: Book): Book
-    fun findByIsbn(isbn: String): Book
+interface FindBookByIsbnUsecase {
+    operator fun invoke(isbn: String) : Book
 }
