@@ -59,7 +59,7 @@ class FindBookByIsbnSteps : BaseSteps(), En {
             try {
                 responseBookDto = restTemplate.getForEntity("$booksEndpoint/$isbn", BookDto::class.java).body
             } catch (e: Exception){
-                responseBookDto = null;
+                responseBookDto = null
                 responseException = e
             }
         }

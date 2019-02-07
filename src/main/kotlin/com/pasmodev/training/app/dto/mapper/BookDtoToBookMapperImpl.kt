@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component
 @Component
 class BookDtoToBookMapperImpl : BookDtoToBookMapper {
 
+    @Throws(NullPropertyException::class)
     override fun map(dto: BookDto): Book {
         return Book(
                 isbn = dto.isbn?.let { it } ?: throw NullPropertyException("ISBN must no be null"),

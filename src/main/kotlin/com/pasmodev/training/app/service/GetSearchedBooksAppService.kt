@@ -17,25 +17,28 @@
 package com.pasmodev.training.app.service
 
 import com.pasmodev.training.app.configuration.Endpoints
-import com.pasmodev.training.app.dto.BookDto
-import com.pasmodev.training.app.dto.mapper.BookDtoToBookMapper
-import com.pasmodev.training.domain.usecase.GetBooksUsecase
+import com.pasmodev.training.app.dto.SearchedBookDto
+import com.pasmodev.training.app.dto.mapper.SearchedBookDtoToSearchedBookMapper
+import com.pasmodev.training.domain.usecase.GetSearchedBooksUsecase
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GetBooksAppService {
+class GetSearchedBooksAppService {
+
+    private val logger = LoggerFactory.getLogger(GetSearchedBooksAppService::class.java)
 
     @Autowired
-    lateinit var getBooks: GetBooksUsecase
+    lateinit var getSearchedBooks: GetSearchedBooksUsecase
 
     @Autowired
-    lateinit var bookDtoToBookMapper: BookDtoToBookMapper
+    lateinit var searchedBookDtoToSearchedBookMapper: SearchedBookDtoToSearchedBookMapper
 
-    @GetMapping(Endpoints.BOOKS)
-    fun findAll(): List<BookDto> {
-        return getBooks().map { book -> bookDtoToBookMapper.reverseMap(book) }
+    @GetMapping(Endpoints.SEARCHED)
+    fun findAll(): List<SearchedBookDto> {
+        logger.debug("findAll")
+        return getSearchedBooks().map { book -> searchedBookDtoToSearchedBookMapper.reverseMap(book) }
     }
-
 }

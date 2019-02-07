@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.domain.usecase
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import com.pasmodev.training.domain.model.SearchedBook
+import com.pasmodev.training.domain.repository.SearchedBookRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+@Component
+class GetSearchedBooksUsecaseImpl : GetSearchedBooksUsecase {
+
+    @Autowired
+    lateinit var searchedBookRepository: SearchedBookRepository
+
+    override fun invoke() : List<SearchedBook> {
+        return searchedBookRepository.getAll()
+    }
+}

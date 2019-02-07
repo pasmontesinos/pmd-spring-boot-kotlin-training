@@ -16,14 +16,26 @@
 
 package com.pasmodev.training.app.dto.mapper
 
-import com.pasmodev.training.app.dto.BookDto
+import com.pasmodev.training.app.dto.SearchedBookDto
 import com.pasmodev.training.app.exception.NullPropertyException
-import com.pasmodev.training.domain.model.Book
+import com.pasmodev.training.domain.model.SearchedBook
+import org.springframework.stereotype.Component
 
-interface BookDtoToBookMapper {
+@Component
+class SearchedBookDtoToSearchedBookMapperImpl : SearchedBookDtoToSearchedBookMapper {
 
     @Throws(NullPropertyException::class)
-    fun map(dto: BookDto): Book
+    override fun map(dto: SearchedBookDto): SearchedBook {
+        return SearchedBook(
+                isbn = dto.isbn?.let { it } ?: throw NullPropertyException("ISBN must no be null"),
+                times = dto.times?.let { it } ?: throw NullPropertyException("Times must no be null")
+        )
+    }
 
-    fun reverseMap(model: Book): BookDto
+    override fun reverseMap(model: SearchedBook): SearchedBookDto {
+        return SearchedBookDto(
+                isbn = model.isbn,
+                times = model.times
+        )
+    }
 }

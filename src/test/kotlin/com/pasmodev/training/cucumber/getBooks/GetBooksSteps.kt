@@ -18,22 +18,16 @@ package com.pasmodev.training.cucumber.getBooks
 
 import com.pasmodev.training.app.TrainingApplication
 import com.pasmodev.training.app.dto.BookDto
-import com.pasmodev.training.app.service.GetBooksAppService
 import com.pasmodev.training.cucumber.BaseSteps
 import com.pasmodev.training.domain.model.Book
 import com.pasmodev.training.domain.repository.BookRepository
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
 import cucumber.api.java8.En
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.web.client.RestTemplate
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = [TrainingApplication::class])
@@ -68,7 +62,7 @@ class GetBooksSteps : BaseSteps(), En {
     }
 
 
-    private val sampleBooks = listOf<Book>(
+    private val sampleBooks = listOf(
             Book(
                     "978-0134494166",
                     "Clean Architecture: A Craftsman's Guide to Software Structure and Design",

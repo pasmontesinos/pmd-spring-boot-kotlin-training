@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.app.dto.mapper
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import com.pasmodev.training.app.dto.SearchedBookDto
+import com.pasmodev.training.app.exception.NullPropertyException
+import com.pasmodev.training.domain.model.SearchedBook
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+interface SearchedBookDtoToSearchedBookMapper {
+
+    @Throws(NullPropertyException::class)
+    fun map(dto: SearchedBookDto): SearchedBook
+
+    fun reverseMap(model: SearchedBook): SearchedBookDto
+}

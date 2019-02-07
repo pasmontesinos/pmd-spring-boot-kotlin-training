@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.app.dto
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
-
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+data class SearchedBookDto(var isbn: String?, var times: Int?)

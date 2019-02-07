@@ -66,7 +66,7 @@ class NewBookSteps : BaseSteps(), En {
             try {
                 responseBookDto = restTemplate.postForEntity(booksEndpoint, bookDto, BookDto::class.java).body
             } catch (e: Exception) {
-                responseBookDto = null;
+                responseBookDto = null
                 responseException = e
             }
         }

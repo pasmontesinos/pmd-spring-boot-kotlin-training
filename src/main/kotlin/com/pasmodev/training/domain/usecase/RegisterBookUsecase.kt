@@ -16,8 +16,10 @@
 
 package com.pasmodev.training.domain.usecase
 
+import com.pasmodev.training.domain.exception.BookAlreadyExistsException
 import com.pasmodev.training.domain.model.Book
 
 interface RegisterBookUsecase {
+    @Throws(BookAlreadyExistsException::class)
     operator fun invoke(book: Book): Book
 }

@@ -16,11 +16,20 @@
 
 package com.pasmodev.training.domain.repository
 
+import com.pasmodev.training.domain.exception.BookAlreadyExistsException
+import com.pasmodev.training.domain.exception.BookNotFoundException
 import com.pasmodev.training.domain.model.Book
 
 interface BookRepository {
     fun deleteAll()
     fun getAll() : List<Book>
+
+    @Throws(BookAlreadyExistsException::class)
     fun create(book: Book): Book
+
+    @Throws(BookNotFoundException::class)
     fun findByIsbn(isbn: String): Book
+
+    fun deleteByIsbn(isbn: String)
+    fun existsByIsbn(isbn: String): Boolean
 }

@@ -16,17 +16,28 @@
 
 package com.pasmodev.training.domain.usecase
 
-import com.pasmodev.training.domain.exception.BookNotFoundException
-import com.pasmodev.training.domain.model.Book
-import com.pasmodev.training.domain.repository.BookRepository
+import com.pasmodev.training.domain.exception.SearchedBookNotFoundException
+import com.pasmodev.training.domain.model.SearchedBook
+import com.pasmodev.training.domain.repository.SearchedBookRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class FindBookByIsbnUsecaseImpl @Autowired constructor(private val bookRepository: BookRepository): FindBookByIsbnUsecase {
+class SaveSearchedBookUsecaseImpl : SaveSearchedBookUsecase {
 
-    @Throws(BookNotFoundException::class)
-    override fun invoke(isbn: String): Book {
-        return bookRepository.findByIsbn(isbn)
+    @Autowired
+    lateinit var searchedBookRepository: SearchedBookRepository
+
+    override fun invoke(isbn: String) : SearchedBook {
+
+        val searchedBook: SearchedBook = try {
+            searchedBookRepository.findByIsbn(isbn)
+        } catch (e: SearchedBookNotFoundException){
+            SearchedBook(isbn, 0)
+        }
+
+        searchedBook.increment()
+
+        return searchedBookRepository.save(searchedBook)
     }
 }

@@ -16,14 +16,10 @@
 
 package com.pasmodev.training.cucumber
 
-import com.pasmodev.training.app.exception.NullPropertyException
-import com.pasmodev.training.domain.exception.BookAlreadyExistsException
-import com.pasmodev.training.domain.exception.BookNotFoundException
 import org.json.JSONObject
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.DefaultResponseErrorHandler
-import sun.nio.ch.IOUtil
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -53,7 +49,7 @@ class RestErrorHandler : DefaultResponseErrorHandler() {
 
     private fun getExceptionClassName(name: String): Class<*>? {
 
-        for (exceptionPackage in listOf<String>("com.pasmodev.training.app.exception", "com.pasmodev.training.domain.exception")){
+        for (exceptionPackage in listOf("com.pasmodev.training.app.exception", "com.pasmodev.training.domain.exception")){
             try {
                 return Class.forName("$exceptionPackage.$name")
             } catch (e: Exception) {

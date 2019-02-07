@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.data.entity.mapper
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import com.pasmodev.training.data.entity.SearchedBookEntity
+import com.pasmodev.training.domain.model.SearchedBook
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+interface SearchedBookEntityToSearchedBookMapper {
+    fun map(entity: SearchedBookEntity): SearchedBook
+    fun reverseMap(model: SearchedBook): SearchedBookEntity
+}

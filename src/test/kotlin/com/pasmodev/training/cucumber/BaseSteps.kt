@@ -16,8 +16,7 @@
 
 package com.pasmodev.training.cucumber
 
-import com.pasmodev.training.app.service.GetBooksAppService
-import org.springframework.beans.factory.annotation.Value
+import com.pasmodev.training.app.configuration.Endpoints
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.web.client.RestTemplate
 
@@ -29,7 +28,10 @@ abstract class BaseSteps {
     private val server = "http://localhost"
 
     protected val booksEndpoint: String
-        get() = "$server:$localServerPort/${GetBooksAppService.BOOKS_ENDPOINT}"
+        get() = "$server:$localServerPort/${Endpoints.BOOKS}"
+
+    protected val searchedBooksEndpoint: String
+        get() = "$server:$localServerPort/${Endpoints.SEARCHED}"
 
     protected val restTemplate = RestTemplate()
 

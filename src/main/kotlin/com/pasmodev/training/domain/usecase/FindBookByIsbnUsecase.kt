@@ -16,8 +16,10 @@
 
 package com.pasmodev.training.domain.usecase
 
+import com.pasmodev.training.domain.exception.BookNotFoundException
 import com.pasmodev.training.domain.model.Book
 
 interface FindBookByIsbnUsecase {
+    @Throws(BookNotFoundException::class)
     operator fun invoke(isbn: String) : Book
 }

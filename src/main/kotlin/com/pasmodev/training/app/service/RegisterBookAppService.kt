@@ -16,16 +16,19 @@
 
 package com.pasmodev.training.app.service
 
+import com.pasmodev.training.app.configuration.Endpoints
 import com.pasmodev.training.app.dto.BookDto
 import com.pasmodev.training.app.dto.mapper.BookDtoToBookMapper
 import com.pasmodev.training.app.exception.NullPropertyException
 import com.pasmodev.training.domain.exception.BookAlreadyExistsException
 import com.pasmodev.training.domain.model.Book
-import com.pasmodev.training.domain.usecase.GetBooksUsecase
 import com.pasmodev.training.domain.usecase.RegisterBookUsecase
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 import java.io.IOException
 import javax.servlet.http.HttpServletResponse
 
@@ -38,7 +41,7 @@ class RegisterBookAppService {
     @Autowired
     lateinit var bookDtoToBookMapper: BookDtoToBookMapper
 
-    @PostMapping(BOOKS_ENDPOINT)
+    @PostMapping(Endpoints.BOOKS)
     fun register(@RequestBody bookDto: BookDto): BookDto {
         return toDto(registerBook(toModel(bookDto)))
     }
@@ -47,23 +50,20 @@ class RegisterBookAppService {
         return bookDtoToBookMapper.reverseMap(book)
     }
 
+    @Throws(NullPropertyException::class)
     private fun toModel(bookDto: BookDto): Book {
         return bookDtoToBookMapper.map(bookDto)
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(NullPropertyException::class)
     @Throws(IOException::class)
     internal fun handleNullPropertyException(e: NullPropertyException, response: HttpServletResponse) {
         response.sendError(HttpStatus.BAD_REQUEST.value(), "${e.javaClass.simpleName}~: ${e.localizedMessage}")
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(BookAlreadyExistsException::class)
     @Throws(IOException::class)
     internal fun handleBookAlreadyExistsException(e: BookAlreadyExistsException, response: HttpServletResponse) {
         response.sendError(HttpStatus.BAD_REQUEST.value(), "${e.javaClass.simpleName}~: ${e.localizedMessage}")
-    }
-
-    companion object {
-        const val BOOKS_ENDPOINT: String = "/books"
     }
 }

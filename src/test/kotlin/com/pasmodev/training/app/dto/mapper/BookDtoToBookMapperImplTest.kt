@@ -58,7 +58,7 @@ class BookDtoToBookMapperImplTest {
 
     @Test
     fun `test map`() {
-        var book = mapper.map(mockBookDto)
+        val book = mapper.map(mockBookDto)
 
         assertThat(book.isbn, equalTo(mockBookDto.isbn))
         assertThat(book.title, equalTo(mockBookDto.title))
@@ -68,7 +68,7 @@ class BookDtoToBookMapperImplTest {
 
     @Test
     fun `test reverseMap`() {
-        var bookDto = mapper.reverseMap(mockBook)
+        val bookDto = mapper.reverseMap(mockBook)
 
         assertThat(bookDto.isbn, equalTo(mockBook.isbn))
         assertThat(bookDto.title, equalTo(mockBook.title))

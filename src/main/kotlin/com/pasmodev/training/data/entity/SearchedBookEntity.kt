@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.data.entity
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import javax.persistence.Entity
+import javax.persistence.Id
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+@Entity(name = "searchedbook")
+data class SearchedBookEntity(@Id var isbn: String, var times: Int)

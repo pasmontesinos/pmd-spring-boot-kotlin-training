@@ -16,7 +16,7 @@
 
 package com.pasmodev.training.data.repository
 
-import com.pasmodev.training.data.entity.BookEntity
+import com.pasmodev.training.data.entity.SearchedBookEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+interface SearchedBookJpaRepository : JpaRepository<SearchedBookEntity, String>

@@ -23,17 +23,14 @@ import com.pasmodev.training.domain.exception.BookNotFoundException
 import com.pasmodev.training.domain.model.Book
 import com.pasmodev.training.domain.repository.BookRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
-import javax.persistence.EntityNotFoundException
 import javax.persistence.PersistenceContext
 
 
 @Component
 class BookRepositoryImpl : BookRepository {
-
     @PersistenceContext
     lateinit var entityManager: EntityManager
 
@@ -48,11 +45,21 @@ class BookRepositoryImpl : BookRepository {
         entityManager.createNativeQuery("DELETE FROM book").executeUpdate()
     }
 
+    @Transactional
+    override fun deleteByIsbn(isbn: String) {
+        bookJpaRepository.deleteById(isbn)
+    }
+
+    override fun existsByIsbn(isbn: String): Boolean {
+        return bookJpaRepository.existsById(isbn)
+    }
+
     override fun getAll() : List<Book> {
         return bookJpaRepository.findAll().map { bookEntity -> bookEntityToBookMapper.map(bookEntity) }
     }
 
     @Transactional
+    @Throws(BookAlreadyExistsException::class)
     override fun create(book: Book): Book {
         if (bookJpaRepository.existsById(book.isbn))
             throw BookAlreadyExistsException("The book with ISBN ${book.isbn} already exist")
@@ -60,6 +67,7 @@ class BookRepositoryImpl : BookRepository {
         return toModel(bookJpaRepository.save(toEntity(book)))
     }
 
+    @Throws(BookNotFoundException::class)
     override fun findByIsbn(isbn: String): Book {
 
         val bookEntity = bookJpaRepository.findById(isbn)

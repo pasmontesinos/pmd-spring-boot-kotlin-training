@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.domain.exception
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import java.lang.Exception
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+class SearchedBookNotFoundException(message: String) : Exception(message)

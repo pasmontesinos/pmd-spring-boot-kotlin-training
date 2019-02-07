@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.domain.model
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import org.hamcrest.CoreMatchers.equalTo
+import org.junit.Assert.*
+import org.junit.Test
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+class SearchedBookTest {
+
+    @Test
+    fun `test increment times`(){
+        val times = 1
+        val searchedBook = SearchedBook("isbn", times)
+
+        searchedBook.increment()
+
+        assertThat(searchedBook.times, equalTo(times + 1))
+    }
+}

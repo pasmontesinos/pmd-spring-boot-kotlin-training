@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.domain.repository
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
+import com.pasmodev.training.domain.exception.SearchedBookNotFoundException
+import com.pasmodev.training.domain.model.SearchedBook
 
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+interface SearchedBookRepository {
+    fun deleteAll()
+    fun getAll(): List<SearchedBook>
+
+    @Throws(SearchedBookNotFoundException::class)
+    fun findByIsbn(isbn: String) : SearchedBook
+
+    fun save(searchedBook: SearchedBook): SearchedBook
+}

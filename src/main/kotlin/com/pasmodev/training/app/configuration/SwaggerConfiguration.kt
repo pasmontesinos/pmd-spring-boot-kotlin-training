@@ -35,7 +35,7 @@ class SwaggerConfiguration {
         return Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.pasmodev.training.app.service"))
-                .paths(regex("/books.*"))
+                .paths(regex("(${Endpoints.BOOKS}|${Endpoints.SEARCHED}).*"))
                 .build()
     }
 

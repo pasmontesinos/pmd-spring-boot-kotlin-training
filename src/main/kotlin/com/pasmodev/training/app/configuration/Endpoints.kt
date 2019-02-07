@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.pasmodev.training.data.repository
+package com.pasmodev.training.app.configuration
 
-import com.pasmodev.training.data.entity.BookEntity
-import org.springframework.data.jpa.repository.JpaRepository
-
-interface BookJpaRepository : JpaRepository<BookEntity, String>
+class Endpoints {
+    companion object {
+        const val BOOKS: String = "/books"
+        const val BOOK: String = "/books/{isbn}"
+        const val SEARCHED: String = "/searched"
+    }
+}

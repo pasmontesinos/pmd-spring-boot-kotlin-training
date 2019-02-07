@@ -16,12 +16,13 @@
 
 package com.pasmodev.training.app.service
 
+import com.pasmodev.training.app.configuration.Endpoints
 import com.pasmodev.training.app.dto.BookDto
 import com.pasmodev.training.app.dto.mapper.BookDtoToBookMapper
-import com.pasmodev.training.domain.exception.BookAlreadyExistsException
 import com.pasmodev.training.domain.exception.BookNotFoundException
 import com.pasmodev.training.domain.usecase.FindBookByIsbnUsecase
-import com.pasmodev.training.domain.usecase.GetBooksUsecase
+import com.pasmodev.training.domain.usecase.SaveSearchedBookUsecase
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -34,24 +35,33 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 class FindBookByIsbnAppService {
 
+    private val logger = LoggerFactory.getLogger(FindBookByIsbnAppService::class.java)
+
     @Autowired
     lateinit var findBookByIsbn: FindBookByIsbnUsecase
 
     @Autowired
+    lateinit var saveSearchedBook: SaveSearchedBookUsecase
+
+    @Autowired
     lateinit var bookDtoToBookMapper: BookDtoToBookMapper
 
-    @GetMapping(BOOK_ENDPOINT)
+    @GetMapping(Endpoints.BOOK)
     fun findByIsbn(@PathVariable("isbn") isbn: String): BookDto {
-        return bookDtoToBookMapper.reverseMap(findBookByIsbn(isbn))
+        logger.debug("findByIsbn $isbn")
+        try {
+            return bookDtoToBookMapper.reverseMap(findBookByIsbn(isbn))
+        } catch (e: BookNotFoundException){
+            logger.debug(e.message)
+            saveSearchedBook(isbn)
+            throw e
+        }
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(BookNotFoundException::class)
     @Throws(IOException::class)
     internal fun handleBookNotFoundException(e: BookNotFoundException, response: HttpServletResponse) {
         response.sendError(HttpStatus.BAD_REQUEST.value(), "${e.javaClass.simpleName}~: ${e.localizedMessage}")
     }
 
-    companion object {
-        const val BOOK_ENDPOINT: String = "/books/{isbn}"
-    }
 }

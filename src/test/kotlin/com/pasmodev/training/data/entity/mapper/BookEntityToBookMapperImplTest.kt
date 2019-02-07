@@ -35,14 +35,14 @@ class BookEntityToBookMapperImplTest {
 
     @Test
     fun map() {
-        var bookEntity = BookEntity(
+        val bookEntity = BookEntity(
                 isbn = "isbn",
                 title = "title",
                 author = "author",
                 category = "category"
         )
 
-        var book = mapper.map(bookEntity)
+        val book = mapper.map(bookEntity)
 
         assertThat(book.isbn, equalTo(bookEntity.isbn))
         assertThat(book.title, equalTo(bookEntity.title))
@@ -52,14 +52,14 @@ class BookEntityToBookMapperImplTest {
 
     @Test
     fun reverseMap() {
-        var book = Book(
+        val book = Book(
                 isbn = "isbn",
                 title = "title",
                 author = "author",
                 category = "category"
         )
 
-        var bookEntity = mapper.reverseMap(book)
+        val bookEntity = mapper.reverseMap(book)
 
         assertThat(bookEntity.isbn, equalTo(book.isbn))
         assertThat(bookEntity.title, equalTo(book.title))
