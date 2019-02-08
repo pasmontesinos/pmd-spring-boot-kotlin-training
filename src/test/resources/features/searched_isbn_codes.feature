@@ -26,3 +26,10 @@ Feature: Searched ISBN codes
     Then response list is empty
 
   Scenario: Get searched isbn code list sorted by counter descendant
+    Given exists book with isbn "978-1445264714" and times 5
+    And exists book with isbn "978-1445264715" and times 1
+    And exists book with isbn "978-1445264716" and times 3
+    When get list of searched books
+    Then position 0 of response list has searched book with isbn "978-1445264714"
+    And position 1 of response list has searched book with isbn "978-1445264716"
+    And position 2 of response list has searched book with isbn "978-1445264715"

@@ -22,6 +22,7 @@ import com.pasmodev.training.domain.exception.SearchedBookNotFoundException
 import com.pasmodev.training.domain.model.SearchedBook
 import com.pasmodev.training.domain.repository.SearchedBookRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -45,7 +46,7 @@ class SearchedBookRepositoryImpl : SearchedBookRepository {
     }
 
     override fun getAll(): List<SearchedBook> {
-        return searchedBookJpaRepository.findAll().map { searchedBookEntity -> searchedBookEntityToSearchedBookMapper.map(searchedBookEntity) }
+        return searchedBookJpaRepository.findAll(Sort(Sort.Direction.DESC, "times")).map { searchedBookEntity -> searchedBookEntityToSearchedBookMapper.map(searchedBookEntity) }
     }
 
     @Throws(SearchedBookNotFoundException::class)

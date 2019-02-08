@@ -20,6 +20,7 @@ import com.pasmodev.training.app.TrainingApplication
 import com.pasmodev.training.app.dto.BookDto
 import com.pasmodev.training.app.dto.SearchedBookDto
 import com.pasmodev.training.cucumber.BaseSteps
+import com.pasmodev.training.domain.model.SearchedBook
 import com.pasmodev.training.domain.repository.BookRepository
 import com.pasmodev.training.domain.repository.SearchedBookRepository
 import cucumber.api.java8.En
@@ -61,6 +62,10 @@ class SearchedIsbnCodesSteps : BaseSteps(), En {
             }
         }
 
+        Given("^exists book with isbn \"([^\"]*)\" and times (\\d+)$") { isbn: String, times: Int ->
+            searchedRepository.save(SearchedBook(isbn, times))
+        }
+
         When("^get list of searched books$") {
             responseSearchedBookDtoList = restTemplate.getForEntity(searchedBooksEndpoint, Array<SearchedBookDto>::class.java).body
         }
@@ -76,6 +81,11 @@ class SearchedIsbnCodesSteps : BaseSteps(), En {
 
         Then("^response list is empty$") {
             assertThat(responseSearchedBookDtoList?.size, equalTo(0))
+        }
+
+
+        Then("^position (\\d+) of response list has searched book with isbn \"([^\"]*)\"$") { index: Int, isbn: String ->
+            assertThat(responseSearchedBookDtoList?.get(index)?.isbn, equalTo(isbn))
         }
 
     }
