@@ -14,6 +14,7 @@ pipelines:
           # You must commit the Gradle wrapper to your repository
           # https://docs.gradle.org/current/userguide/gradle_wrapper.html
           - bash ./gradlew build
-          - bash ./gradlew buildDocker
+          - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+          - bash ./gradlew buildDocker -Ppush
         services:
           - docker

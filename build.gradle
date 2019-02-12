@@ -41,7 +41,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com.pasmodev'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -84,8 +84,9 @@ compileTestKotlin {
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
-	push = false
+	push = project.hasProperty('push')
 	applicationName = jar.baseName
+	group = "pasmodev"
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
 		copy {
