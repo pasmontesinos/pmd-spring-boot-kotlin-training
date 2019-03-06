@@ -76,7 +76,6 @@ class NewBookSteps : BaseSteps(), En {
         }
 
         Then("^response book has isbn \"([^\"]*)\"$") { isbn: String ->
-            print("${responseBookDto?.isbn} $isbn")
             assertThat(responseBookDto?.isbn, equalTo(isbn))
         }
     }
