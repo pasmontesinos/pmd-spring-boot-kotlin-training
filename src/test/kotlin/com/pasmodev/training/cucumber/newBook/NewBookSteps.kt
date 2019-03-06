@@ -79,5 +79,4 @@ class NewBookSteps : BaseSteps(), En {
             assertThat(responseBookDto?.isbn, equalTo(isbn))
         }
     }
-
 }
