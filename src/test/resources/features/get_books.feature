@@ -10,7 +10,6 @@ Feature: Get Books
     When get list of books
     Then response list is empty
 
-
   Scenario: Get all books when there are books
     Given there are 3 books
     When get list of books
