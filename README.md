@@ -36,7 +36,7 @@ Training project for Clean Architecture, BDD and TDD with Spring Boot 2.1.2 and 
 - [x] Register isbn code searched when user not found book by isbn code
 - [x] Increment times when isbn code searched that already exists
 - [x] Get empty list when there are no searched isbn codes
-- [ ] Get searched isbn code list sorted by times descendant
+- [X] Get searched isbn code list sorted by times descendant
 
 
 
